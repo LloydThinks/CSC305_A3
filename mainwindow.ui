@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>frmMain</class>
+ <widget class="QWidget" name="frmMain">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>794</width>
+    <height>603</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>OpenGl - Qt -Direct Mode Drawing</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="maximumSize">
+      <size>
+       <width>170</width>
+       <height>900</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>Controls</string>
+     </property>
+     <widget class="QPushButton" name="pushButton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>300</y>
+        <width>150</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Change Look-At</string>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>230</y>
+        <width>150</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Tension</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <widget class="QSlider" name="horizontalSlider">
+       <property name="geometry">
+        <rect>
+         <x>5</x>
+         <y>23</y>
+         <width>140</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>200</number>
+       </property>
+       <property name="sliderPosition">
+        <number>25</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>150</width>
+        <height>80</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Coordinate System</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <widget class="QCheckBox" name="checkBox">
+       <property name="geometry">
+        <rect>
+         <x>5</x>
+         <y>24</y>
+         <width>140</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Ground Plane</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="checkBox_2">
+       <property name="geometry">
+        <rect>
+         <x>5</x>
+         <y>48</y>
+         <width>140</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>X-Y-Z Axis</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_4">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>120</y>
+        <width>150</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>User System</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <widget class="QCheckBox" name="checkBox_5">
+       <property name="geometry">
+        <rect>
+         <x>5</x>
+         <y>72</y>
+         <width>140</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Catmull-Rom</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="checkBox_4">
+       <property name="geometry">
+        <rect>
+         <x>5</x>
+         <y>47</y>
+         <width>140</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Control Lines</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="checkBox_3">
+       <property name="geometry">
+        <rect>
+         <x>5</x>
+         <y>23</y>
+         <width>140</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Control Points</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QScrollArea" name="glWidgetArea">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>582</width>
+        <height>521</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QFrame" name="frame">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>750</width>
+       <height>40</height>
+      </size>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="btnClose">
+        <property name="text">
+         <string>Quit</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>btnClose</sender>
+   <signal>clicked()</signal>
+   <receiver>frmMain</receiver>
+   <slot>endit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>625</x>
+     <y>32</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>194</x>
+     <y>215</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnClose</sender>
+   <signal>clicked()</signal>
+   <receiver>frmMain</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>753</x>
+     <y>45</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>650</x>
+     <y>579</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnClose</sender>
+   <signal>clicked()</signal>
+   <receiver>frmMain</receiver>
+   <slot>endit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>753</x>
+     <y>45</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>657</x>
+     <y>530</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>frmMain</receiver>
+   <slot>changeLookAt()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>123</x>
+     <y>443</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>188</x>
+     <y>460</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>frmMain</receiver>
+   <slot>tensionSlider(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>154</x>
+     <y>508</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>190</x>
+     <y>504</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frmMain</receiver>
+   <slot>groundPlane(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>141</x>
+     <y>195</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>189</x>
+     <y>194</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_2</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frmMain</receiver>
+   <slot>axis(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>131</x>
+     <y>253</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>189</x>
+     <y>252</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_3</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frmMain</receiver>
+   <slot>controlPoints(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>126</x>
+     <y>303</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>191</x>
+     <y>303</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_5</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frmMain</receiver>
+   <slot>catmullRom(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>132</x>
+     <y>407</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>190</x>
+     <y>405</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_4</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frmMain</receiver>
+   <slot>controlLines(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>161</x>
+     <y>356</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>190</x>
+     <y>355</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>changeLookAt()</slot>
+  <slot>tensionSlider(int)</slot>
+  <slot>groundPlane(bool)</slot>
+  <slot>controlPoints(bool)</slot>
+  <slot>axis(bool)</slot>
+  <slot>catmullRom(bool)</slot>
+  <slot>controlLines(bool)</slot>
+ </slots>
+</ui>
