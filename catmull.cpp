@@ -146,9 +146,10 @@ void catmull::drawCurve(int pnt1[], int pnt2[], int pnt3[], int pnt4[])
     double u = 0;
 
     // Generalized Cylinder Code
+    double sqx, sqy, sqz, cos, cos1, xycos1, yzcos1, zxcos1, sin, xsin, ysin, zsin;
     double velX, velY, velZ;
     double accX, accY, accZ;
-    QVector3D vel, acc, biNorm, norm;
+    QVector3D vel0, vel1, acc, biNorm, norm;
     QVector<QVector3D> lastPoints, currentPoints;
 
     // Handle the edge case with generalized cylinders
@@ -178,15 +179,15 @@ void catmull::drawCurve(int pnt1[], int pnt2[], int pnt3[], int pnt4[])
              double(pnt3[2]) * (2*(3-2*t) + 6*(t-2)*u) + \
              double(pnt4[2]) * (-2*t + 6*t*u));
 
-    vel = QVector3D(velX, velY, velZ);
-    vel = vel.normalized();
+    vel0 = QVector3D(velX, velY, velZ);
+    vel0 = vel0.normalized();
 
     acc = QVector3D(accX, accY, accZ);
     acc = acc.normalized();
 
-    biNorm = QVector3D::crossProduct(vel, acc);
+    biNorm = QVector3D::crossProduct(vel0, acc);
     biNorm = biNorm.normalized();
-    norm = QVector3D::crossProduct(vel, biNorm);
+    norm = QVector3D::crossProduct(vel0, biNorm);
 
     currentPoints = find2dCirclePoints(biNorm, norm, QVector3D(stepX0, stepY0, stepZ0));
 
@@ -233,35 +234,37 @@ void catmull::drawCurve(int pnt1[], int pnt2[], int pnt3[], int pnt4[])
                      double(pnt3[2]) * (t + 2*(3-2*t)*u + 3*(t-2)*u*u) + \
                      double(pnt4[2]) * (-2*t*u + 3*t*u*u));
 
-            accX = (double(pnt1[0]) * (4*t - 6*t*u) + \
-                     double(pnt2[0]) * (2*(t-3) + 6*(2-t)*u) + \
-                     double(pnt3[0]) * (2*(3-2*t) + 6*(t-2)*u) + \
-                     double(pnt4[0]) * (-2*t + 6*t*u));
-            accY = (double(pnt1[1]) * (4*t - 6*t*u) + \
-                     double(pnt2[1]) * (2*(t-3) + 6*(2-t)*u) + \
-                     double(pnt3[1]) * (2*(3-2*t) + 6*(t-2)*u) + \
-                     double(pnt4[1]) * (-2*t + 6*t*u));
-            accZ = (double(pnt1[2]) * (4*t - 6*t*u) + \
-                     double(pnt2[2]) * (2*(t-3) + 6*(2-t)*u) + \
-                     double(pnt3[2]) * (2*(3-2*t) + 6*(t-2)*u) + \
-                     double(pnt4[2]) * (-2*t + 6*t*u));
+            vel1 = QVector3D(velX, velY, velZ);
+            vel1 = vel1.normalized();
 
-            vel = QVector3D(velX, velY, velZ);
-            vel = vel.normalized();
+            // Following math is to calculate the next frenet frame based on rotation
+            QVector3D A = QVector3D::crossProduct(vel0, vel1);
+            sqx = A.x()*A.x();
+            sqy = A.y()*A.y();
+            sqz = A.z()*A.z();
+            cos = QVector3D::dotProduct(vel0, vel1);
+            cos1 = 1 - cos;
+            xycos1 = A.x()*A.y()*cos1;
+            yzcos1 = A.y()*A.z()*cos1;
+            zxcos1 = A.x()*A.z()*cos1;
+            sin = sqrt(1 - cos*cos);
+            xsin = A.x()*sin;
+            ysin = A.y()*sin;
+            zsin = A.z()*sin;
 
-            acc = QVector3D(accX, accY, accZ);
-            acc = acc.normalized();
+            double values[] = {(sqx + (1 - sqx) * cos), (xycos1 + zsin), (zxcos1 - ysin),
+                             (xycos1 - zsin), (sqy + (1 - sqy) * cos), (yzcos1 + xsin),
+                             (zxcos1 + ysin), (yzcos1 - xsin), (sqz + (1 - sqz) * cos)};
+            QMatrix3x3 R = QMatrix3x3( values );
 
-            qDebug() << acc;
-
-            biNorm = QVector3D::crossProduct(vel, acc);
+            biNorm = vectorTransform(biNorm ,R);
             biNorm = biNorm.normalized();
-            norm = QVector3D::crossProduct(vel, biNorm);
+            norm = QVector3D::crossProduct(vel1, biNorm);
 
             currentPoints = find2dCirclePoints(biNorm, norm, QVector3D(stepX1, stepY1, stepZ1));
 
             drawCylinder(lastPoints, currentPoints);
-
+            vel0 = vel1;
         }
         u += step;
     }
@@ -271,6 +274,15 @@ void catmull::drawCurve(int pnt1[], int pnt2[], int pnt3[], int pnt4[])
         glColor3f(0.129f, 0.850f, 0.768f);
         drawLine(stepX1, stepY1, stepZ1, double(pnt3[0]), double(pnt3[1]), double(pnt3[2]));
     }
+}
+
+QVector3D catmull::vectorTransform(QVector3D v, QMatrix3x3 m)
+{
+    QVector3D transformed = QVector3D();
+    transformed.setX( ((m(0,0))*v.x()) + ((m(0,1))*v.y()) + ((m(0,2))*v.z()) );
+    transformed.setY( ((m(1,0))*v.x()) + ((m(1,1))*v.y()) + ((m(1,2))*v.z()) );
+    transformed.setZ( ((m(2,0))*v.x()) + ((m(2,1))*v.y()) + ((m(2,2))*v.z()) );
+    return transformed;
 }
 
 QVector<QVector3D> catmull::find2dCirclePoints(QVector3D biNorm, QVector3D norm, QVector3D point)

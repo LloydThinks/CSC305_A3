@@ -40,6 +40,7 @@ typedef int bool;
 #include <qdebug.h>
 #include <QVector3D>
 #include <QVector>
+#include <QMatrix3x3>
 
 
 
