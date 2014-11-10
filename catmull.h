@@ -78,7 +78,8 @@ private:
     int select(int x, int y, int z, Mode window);
     bool nearzero(double x);
     int motionType; // 0 = parameter value 1 = const velocity
-    QVector3D find2dCirclePoints(QVector3D biNorm, QVector3D norm, QVector3D point);
+    QVector<QVector3D> find2dCirclePoints(QVector3D biNorm, QVector3D norm, QVector3D point);
+    void drawCylinder(QVector<QVector3D> lastPoints, QVector<QVector3D> currentPoints);
 
     int tensionValue;
     bool showControlPoints;

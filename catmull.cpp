@@ -136,7 +136,6 @@ bool catmull::nearzero(double x)
 
 void catmull::drawCurve(int pnt1[], int pnt2[], int pnt3[], int pnt4[])
 {
-    glColor3f(0.129f, 0.850f, 0.768f);
     // Save the original points per segment
     double stepX0 = double(pnt2[0]);
     double stepY0 = double(pnt2[1]);
@@ -144,12 +143,54 @@ void catmull::drawCurve(int pnt1[], int pnt2[], int pnt3[], int pnt4[])
     double stepX1, stepY1, stepZ1;
     double t = double(tensionValue)/50.0;
     double step = 1.0/double(numSteps);
-    double u = step;
+    double u = 0;
 
     // Generalized Cylinder Code
-    double velX0, velY0, velZ0;
-    double accX0, accY0, accZ0;
+    double velX, velY, velZ;
+    double accX, accY, accZ;
     QVector3D vel, acc, biNorm, norm;
+    QVector<QVector3D> lastPoints, currentPoints;
+
+    // Handle the edge case with generalized cylinders
+    velX = (double(pnt1[0]) * (-t + 4*t*u - 3*t*u*u) + \
+             double(pnt2[0]) * (2*(t-3)*u + 3*(2-t)*u*u) + \
+             double(pnt3[0]) * (t + 2*(3-2*t)*u + 3*(t-2)*u*u) + \
+             double(pnt4[0]) * (-2*t*u + 3*t*u*u));
+    velY = (double(pnt1[1]) * (-t + 4*t*u - 3*t*u*u) + \
+             double(pnt2[1]) * (2*(t-3)*u + 3*(2-t)*u*u) + \
+             double(pnt3[1]) * (t + 2*(3-2*t)*u + 3*(t-2)*u*u) + \
+             double(pnt4[1]) * (-2*t*u + 3*t*u*u));
+    velZ = (double(pnt1[2]) * (-t + 4*t*u - 3*t*u*u) + \
+             double(pnt2[2]) * (2*(t-3)*u + 3*(2-t)*u*u) + \
+             double(pnt3[2]) * (t + 2*(3-2*t)*u + 3*(t-2)*u*u) + \
+             double(pnt4[2]) * (-2*t*u + 3*t*u*u));
+
+    accX = (double(pnt1[0]) * (4*t - 6*t*u) + \
+             double(pnt2[0]) * (2*(t-3) + 6*(2-t)*u) + \
+             double(pnt3[0]) * (2*(3-2*t) + 6*(t-2)*u) + \
+             double(pnt4[0]) * (-2*t + 6*t*u));
+    accY = (double(pnt1[1]) * (4*t - 6*t*u) + \
+             double(pnt2[1]) * (2*(t-3) + 6*(2-t)*u) + \
+             double(pnt3[1]) * (2*(3-2*t) + 6*(t-2)*u) + \
+             double(pnt4[1]) * (-2*t + 6*t*u));
+    accZ = (double(pnt1[2]) * (4*t - 6*t*u) + \
+             double(pnt2[2]) * (2*(t-3) + 6*(2-t)*u) + \
+             double(pnt3[2]) * (2*(3-2*t) + 6*(t-2)*u) + \
+             double(pnt4[2]) * (-2*t + 6*t*u));
+
+    vel = QVector3D(velX, velY, velZ);
+    vel = vel.normalized();
+
+    acc = QVector3D(accX, accY, accZ);
+    acc = acc.normalized();
+
+    biNorm = QVector3D::crossProduct(vel, acc);
+    biNorm = biNorm.normalized();
+    norm = QVector3D::crossProduct(vel, biNorm);
+
+    currentPoints = find2dCirclePoints(biNorm, norm, QVector3D(stepX0, stepY0, stepZ0));
+
+    u = step;
     // Each time through the loop, use a calculation on u to find the next step
     // Each step is a point to be drawn
     for (int i = 0; i < numSteps; i++)
@@ -167,60 +208,70 @@ void catmull::drawCurve(int pnt1[], int pnt2[], int pnt3[], int pnt4[])
                   double(pnt3[2]) * (t*u + (3-2*t)*u*u + (t-2)*u*u*u) + \
                   double(pnt4[2]) * (-t*u*u + t*u*u*u));
         if (showCatmullRom)
+        {
+            glColor3f(0.129f, 0.850f, 0.768f);
             drawLine(stepX0, stepY0, stepZ0, stepX1, stepY1, stepZ1);
+        }
         stepX0 = stepX1;
         stepY0 = stepY1;
         stepZ0 = stepZ1;
 
-        u += step;
         if (showGeneralizedCylinder)
         {
-            velX0 = (double(pnt1[0]) * (-t + 4*t*u - 3*t*u*u) + \
+            lastPoints = currentPoints;
+
+            velX = (double(pnt1[0]) * (-t + 4*t*u - 3*t*u*u) + \
                      double(pnt2[0]) * (2*(t-3)*u + 3*(2-t)*u*u) + \
                      double(pnt3[0]) * (t + 2*(3-2*t)*u + 3*(t-2)*u*u) + \
                      double(pnt4[0]) * (-2*t*u + 3*t*u*u));
-            velY0 = (double(pnt1[1]) * (-t + 4*t*u - 3*t*u*u) + \
+            velY = (double(pnt1[1]) * (-t + 4*t*u - 3*t*u*u) + \
                      double(pnt2[1]) * (2*(t-3)*u + 3*(2-t)*u*u) + \
                      double(pnt3[1]) * (t + 2*(3-2*t)*u + 3*(t-2)*u*u) + \
                      double(pnt4[1]) * (-2*t*u + 3*t*u*u));
-            velZ0 = (double(pnt1[2]) * (-t + 4*t*u - 3*t*u*u) + \
+            velZ = (double(pnt1[2]) * (-t + 4*t*u - 3*t*u*u) + \
                      double(pnt2[2]) * (2*(t-3)*u + 3*(2-t)*u*u) + \
                      double(pnt3[2]) * (t + 2*(3-2*t)*u + 3*(t-2)*u*u) + \
                      double(pnt4[2]) * (-2*t*u + 3*t*u*u));
 
-            accX0 = (double(pnt1[0]) * (4*t - 6*t*u) + \
+            accX = (double(pnt1[0]) * (4*t - 6*t*u) + \
                      double(pnt2[0]) * (2*(t-3) + 6*(2-t)*u) + \
                      double(pnt3[0]) * (2*(3-2*t) + 6*(t-2)*u) + \
                      double(pnt4[0]) * (-2*t + 6*t*u));
-            accY0 = (double(pnt1[1]) * (4*t - 6*t*u) + \
+            accY = (double(pnt1[1]) * (4*t - 6*t*u) + \
                      double(pnt2[1]) * (2*(t-3) + 6*(2-t)*u) + \
                      double(pnt3[1]) * (2*(3-2*t) + 6*(t-2)*u) + \
                      double(pnt4[1]) * (-2*t + 6*t*u));
-            accZ0 = (double(pnt1[2]) * (4*t - 6*t*u) + \
+            accZ = (double(pnt1[2]) * (4*t - 6*t*u) + \
                      double(pnt2[2]) * (2*(t-3) + 6*(2-t)*u) + \
                      double(pnt3[2]) * (2*(3-2*t) + 6*(t-2)*u) + \
                      double(pnt4[2]) * (-2*t + 6*t*u));
 
-            vel = QVector3D(velX0, velY0, velZ0);
+            vel = QVector3D(velX, velY, velZ);
             vel = vel.normalized();
 
-            acc = QVector3D(accX0, accY0, accZ0);
+            acc = QVector3D(accX, accY, accZ);
             acc = acc.normalized();
 
             biNorm = QVector3D::crossProduct(vel, acc);
             biNorm = biNorm.normalized();
             norm = QVector3D::crossProduct(vel, biNorm);
 
-            find2dCirclePoints(biNorm, norm, QVector3D(stepX1, stepY1, stepZ1));
+            currentPoints = find2dCirclePoints(biNorm, norm, QVector3D(stepX1, stepY1, stepZ1));
 
+            drawCylinder(lastPoints, currentPoints);
 
         }
+        u += step;
     }
     // Draw the final line per segment, to connect with the next segment
-    drawLine(stepX1, stepY1, stepZ1, double(pnt3[0]), double(pnt3[1]), double(pnt3[2]));
+    if (showCatmullRom)
+    {
+        glColor3f(0.129f, 0.850f, 0.768f);
+        drawLine(stepX1, stepY1, stepZ1, double(pnt3[0]), double(pnt3[1]), double(pnt3[2]));
+    }
 }
 
-QVector3D catmull::find2dCirclePoints(QVector3D biNorm, QVector3D norm, QVector3D point)
+QVector<QVector3D> catmull::find2dCirclePoints(QVector3D biNorm, QVector3D norm, QVector3D point)
 {
     double cX = 0.0;
     double cY = 1;
@@ -237,13 +288,44 @@ QVector3D catmull::find2dCirclePoints(QVector3D biNorm, QVector3D norm, QVector3
                   point.y() + cX*norm.y() + cY*biNorm.y(),
                   point.z() + cX*norm.z() + cY*biNorm.z(), 1);
     }
+    return cPoints;
+}
+
+void catmull::drawCylinder(QVector<QVector3D> lastPoints, QVector<QVector3D> currentPoints)
+{
+    QVector3D t0, t1, b0, b1;
+    b1 = lastPoints[lastPoints.size() - 1];
+    t1 = currentPoints[currentPoints.size() - 1];
+
+    glColor3f(0.129f, 0.850f, 0.768f);
+    for (int i = 0; i < numCircleSegs; i++)
+    {
+        b0 = b1;
+        t0 = t1;
+
+        b1 = lastPoints[i];
+        t1 = currentPoints[i];
+
+        glBegin(GL_TRIANGLES);
+        glVertex3f(b1.x(), b1.y(), b1.z());
+        glVertex3f(b0.x(), b0.y(), b0.z());
+        glVertex3f(t0.x(), t0.y(), t0.z());
+        glEnd();
+
+        glBegin(GL_TRIANGLES);
+        glVertex3f(b1.x(), b1.y(), b1.z());
+        glVertex3f(t0.x(), t0.y(), t0.z());
+        glVertex3f(t1.x(), t1.y(), t1.z());
+
+        glEnd();
+
+    }
 }
 
 void catmull::draw()
 {
 	int i;
     int x0,x1,y0,y1,z0,z1;
-	jVec2 a,b,c;
 	    
 	glColor3f(1.0f, 0.0f, 0.1f);
 	x1 = pnts[0][0];
