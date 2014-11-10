@@ -30,7 +30,7 @@ public:
 
     void setxoff(int i){xoff=i;}
     void setyoff(int i){yoff=i;}
-    void drawCurve(int pnt1[3], int pnt2[3], int pnt3[3], int pnt4[3]);
+    void drawCurve(int pnt1[3], int pnt2[3], int pnt3[3], int pnt4[3], QVector3D vel0, QVector3D norm, QVector3D biNorm);
     void clear(){lastpt=0;}
     void setHull(bool b){hull=b;}
     void animate();
@@ -81,6 +81,7 @@ private:
     QVector<QVector3D> find2dCirclePoints(QVector3D biNorm, QVector3D norm, QVector3D point);
     void drawCylinder(QVector<QVector3D> lastPoints, QVector<QVector3D> currentPoints);
     QVector3D vectorTransform(QVector3D v, QMatrix3x3 m);
+    void drawWireFrame(QVector<QVector3D> lastPoints, QVector<QVector3D> currentPoints);
 
     int tensionValue;
     bool showControlPoints;
