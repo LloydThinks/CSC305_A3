@@ -252,6 +252,8 @@ void catmull::drawCurve(int pnt1[], int pnt2[], int pnt3[], int pnt4[])
             acc = QVector3D(accX, accY, accZ);
             acc = acc.normalized();
 
+            qDebug() << acc;
+
             biNorm = QVector3D::crossProduct(vel, acc);
             biNorm = biNorm.normalized();
             norm = QVector3D::crossProduct(vel, biNorm);
