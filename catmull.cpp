@@ -303,6 +303,7 @@ void catmull::drawCylinder(QVector<QVector3D> lastPoints, QVector<QVector3D> cur
         b1 = lastPoints[i];
         t1 = currentPoints[i];
 
+
         glBegin(GL_TRIANGLES);
         glVertex3f(b1.x(), b1.y(), b1.z());
         glVertex3f(b0.x(), b0.y(), b0.z());
