@@ -77,12 +77,16 @@ private:
     void movePoint(int x, int y, int z, Mode window);
     int select(int x, int y, int z, Mode window);
     bool nearzero(double x);
-	int motionType; // 0 = parameter value 1 = const velocity
+    int motionType; // 0 = parameter value 1 = const velocity
+    QVector3D find2dCirclePoints(QVector3D biNorm, QVector3D norm, QVector3D point);
 
     int tensionValue;
     bool showControlPoints;
     bool showControlLines;
     bool showCatmullRom;
+    bool showGeneralizedCylinder;
+    double numCircleSegs;
+    double radius;
 };
 
 #endif // !defined(AFX_CATMULL_H__27EEFB10_E01C_4540_94B1_94F9D5CFC5DC__INCLUDED_)

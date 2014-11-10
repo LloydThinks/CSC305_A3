@@ -38,6 +38,8 @@ typedef int bool;
 #include <QEvent>
 #include <qfiledialog.h>
 #include <qdebug.h>
+#include <QVector3D>
+#include <QVector>
 
 
 

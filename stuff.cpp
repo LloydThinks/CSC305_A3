@@ -10,9 +10,9 @@ void fatal(char *s)
   exit(99);
 }
 
-void drawPoint(double x, double y, double z) {
+void drawPoint(double x, double y, double z, float radius) {
     glColor3f(1.0f, 0.0f, 0.0f);
-    glPointSize(10.0f);
+    glPointSize(radius);
     glBegin(GL_POINTS);
     glVertex3d(x, y, z);
     glEnd();
