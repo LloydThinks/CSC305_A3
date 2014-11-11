@@ -322,8 +322,9 @@ void catmull::drawCylinder(QVector<QVector3D> lastPoints, QVector<QVector3D> cur
 
 void catmull::draw()
 {
-	int i;
     int x0,x1,y0,y1,z0,z1;
+
+    QVector<QVector3D> catmullLines;
 
     double velX, velY, velZ;
     double accX, accY, accZ;
@@ -334,7 +335,7 @@ void catmull::draw()
 	x1 = pnts[0][0];
     y1 = pnts[0][1];
     z1 = pnts[0][2];
-    for (i=0; i<lastpt; i++) {
+    for (int i=0; i<lastpt; i++) {
 		x0=x1;
 		y0=y1;
         z0=z1;
@@ -356,6 +357,10 @@ void catmull::draw()
         // Draw the curve between each segment
         if (i > 1 && i < (lastpt - 1))
         {
+            //catmullLines = findCatmullLines();
+
+
+
             if (i == 2)
             {
                 // Handle the first Frenet Frame
