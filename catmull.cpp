@@ -33,6 +33,7 @@ catmull::catmull()
     radius = 50.0;
 
     frenetFrameBoxIndex = 0;
+    fbSize = 25;
     frenetFrameBox = QVector<QVector3D>(8);
     // TESTING
     frenetFrameBox[0] = QVector3D(-50, 50, 50);
@@ -47,10 +48,12 @@ catmull::catmull()
     showControlPoints = true;
     showControlLines = true;
     showCatmullRom = true;
-    showGeneralizedCylinder = true;
+    showGeneralizedCylinder = false;
     showFrenetFrameBox = true;
 
     time.start();
+
+    mPoint = QVector3D(0,0,0);
 }
 
 catmull::~catmull()
@@ -201,7 +204,7 @@ void catmull::draw()
         z1 = pnts[i][2];
         if (showControlPoints)
         {
-            glColor3f(0.2f, 0.8f, 0.1f);
+            glColor3f(1.0f, 0.0f, 0.0f);
             drawPoint(double(x1), double(y1), double(z1), 10);
         }
         if (showControlLines)
@@ -214,24 +217,20 @@ void catmull::draw()
 
     if (lastpt > 3)  // There are at least 4 control points
     {
-        if (showCatmullRom || showGeneralizedCylinder)
-            catPoints = findCatPoints();
-        if (showGeneralizedCylinder)
+        catPoints = findCatPoints();
+        genCylPoints = findGenCylPoints(catPoints);
+        if (showCatmullRom)
             drawCatmull(catPoints);
         if (showGeneralizedCylinder)
-        {
-            genCylPoints = findGenCylPoints(catPoints);
             drawGenCyl(genCylPoints);
-        }
-        if (showFrenetFrameBox)
-            drawFrenetFrameBox();
     }
-
-
 }
 
 void catmull::drawFrenetFrameBox()
 {
+    glColor3f(0.129f, 0.850f, 0.768f);
+    drawPoint(mPoint.x(), mPoint.y(), mPoint.z(), 20);
+    // Draw Top of Frenet Box
     drawLine(frenetFrameBox[0].x(), frenetFrameBox[0].y(), frenetFrameBox[0].z(),
              frenetFrameBox[1].x(), frenetFrameBox[1].y(), frenetFrameBox[1].z());
     drawLine(frenetFrameBox[1].x(), frenetFrameBox[1].y(), frenetFrameBox[1].z(),
@@ -241,6 +240,7 @@ void catmull::drawFrenetFrameBox()
     drawLine(frenetFrameBox[3].x(), frenetFrameBox[3].y(), frenetFrameBox[3].z(),
              frenetFrameBox[0].x(), frenetFrameBox[0].y(), frenetFrameBox[0].z());
 
+    // Draw Bottom of Frenet Box
     drawLine(frenetFrameBox[4].x(), frenetFrameBox[4].y(), frenetFrameBox[4].z(),
              frenetFrameBox[5].x(), frenetFrameBox[5].y(), frenetFrameBox[5].z());
     drawLine(frenetFrameBox[5].x(), frenetFrameBox[5].y(), frenetFrameBox[5].z(),
@@ -250,9 +250,10 @@ void catmull::drawFrenetFrameBox()
     drawLine(frenetFrameBox[7].x(), frenetFrameBox[7].y(), frenetFrameBox[7].z(),
              frenetFrameBox[4].x(), frenetFrameBox[4].y(), frenetFrameBox[4].z());
 
+    // Draw Middle of Frenet Box
     drawLine(frenetFrameBox[0].x(), frenetFrameBox[0].y(), frenetFrameBox[0].z(),
              frenetFrameBox[4].x(), frenetFrameBox[4].y(), frenetFrameBox[4].z());
-    drawLine(frenetFrameBox[1].x(), frenetFrameBox[4].y(), frenetFrameBox[4].z(),
+    drawLine(frenetFrameBox[1].x(), frenetFrameBox[1].y(), frenetFrameBox[1].z(),
              frenetFrameBox[5].x(), frenetFrameBox[5].y(), frenetFrameBox[5].z());
     drawLine(frenetFrameBox[2].x(), frenetFrameBox[2].y(), frenetFrameBox[2].z(),
              frenetFrameBox[6].x(), frenetFrameBox[6].y(), frenetFrameBox[6].z());
@@ -365,7 +366,19 @@ QVector< QVector<QVector3D> > catmull::findGenCylPoints(QVector<QVector3D> catPo
             {
                 time.restart();
 
+                if (++frenetFrameBoxIndex == catPoints.size())
+                    frenetFrameBoxIndex = 0;
             }
+
+            if (showFrenetFrameBox && frenetFrameBoxIndex == ((i * numSteps) + j))
+            {
+                //frenetFrameBox[0].setX( catPoints[frenetFrameBoxIndex++].x() + norm.x()*fbSize - biNorm.x()*fbSize - vel.x()*fbSize);
+
+                mPoint = catPoints[frenetFrameBoxIndex];
+                drawFrenetFrameBox();
+            }
+
+
 
 
 
@@ -456,8 +469,6 @@ void catmull::drawWireFrame(QVector<QVector3D> lastPoints, QVector<QVector3D> cu
 
         drawLine(b0.x(), b0.y(), b0.z(), b1.x(), b1.y(), b1.z());
         drawLine(t0.x(), t0.y(), t0.z(), t1.x(), t1.y(), t1.z());
-
-//        drawLine(b0.x(), b0.y(), b0.z(), t0.x(), t0.y(), t0.z());
         drawLine(b1.x(), b1.y(), b1.z(), t1.x(), t1.y(), t1.z());
     }
 }

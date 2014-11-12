@@ -93,6 +93,9 @@ private:
     int frenetFrameBoxIndex;
     QVector<QVector3D> frenetFrameBox;
     void drawFrenetFrameBox();
+    int fbSize;
+
+    QVector3D mPoint;
 
     int tensionValue;
     bool showControlPoints;

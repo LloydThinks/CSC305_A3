@@ -11,7 +11,6 @@ void fatal(char *s)
 }
 
 void drawPoint(double x, double y, double z, float radius) {
-    glColor3f(1.0f, 0.0f, 0.0f);
     glPointSize(radius);
     glBegin(GL_POINTS);
     glVertex3d(x, y, z);

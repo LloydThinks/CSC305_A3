@@ -68,7 +68,6 @@ void twod::paintGL()
         drawLine(0, 0, -400, 0, 0, 400);
         glColor3f(0.0f, 1.0f, 0.0f);
         drawLine(0, -400, 0, 0, 400, 0);
-
     }
 
     catt->draw();
