@@ -524,6 +524,7 @@ void catmull::drawGenCyl(QVector< QVector<QVector3D> > genCylPoints)
     for (int i = 0; i < (genCylPoints.size() - 1); i++)
     {
         drawWireFrame(genCylPoints[i], genCylPoints[i + 1]);
+//        drawCylinder(genCylPoints[i], genCylPoints[i + 1]);
     }
 }
 
