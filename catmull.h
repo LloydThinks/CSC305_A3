@@ -93,7 +93,7 @@ private:
     int frenetFrameBoxIndex;
     QVector<QVector3D> frenetFrameBox;
     void drawFrenetFrameBox();
-    int fbSize;
+    double fbSize;
 
     QVector3D mPoint;
 

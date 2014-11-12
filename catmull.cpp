@@ -33,7 +33,7 @@ catmull::catmull()
     radius = 50.0;
 
     frenetFrameBoxIndex = 0;
-    fbSize = 25;
+    fbSize = 50.0;
     frenetFrameBox = QVector<QVector3D>(8);
     // TESTING
     frenetFrameBox[0] = QVector3D(-50, 50, 50);
@@ -229,7 +229,7 @@ void catmull::draw()
 void catmull::drawFrenetFrameBox()
 {
     glColor3f(0.129f, 0.850f, 0.768f);
-    drawPoint(mPoint.x(), mPoint.y(), mPoint.z(), 20);
+    drawPoint(mPoint.x(), mPoint.y(), mPoint.z(), 5);
     // Draw Top of Frenet Box
     drawLine(frenetFrameBox[0].x(), frenetFrameBox[0].y(), frenetFrameBox[0].z(),
              frenetFrameBox[1].x(), frenetFrameBox[1].y(), frenetFrameBox[1].z());
@@ -372,7 +372,37 @@ QVector< QVector<QVector3D> > catmull::findGenCylPoints(QVector<QVector3D> catPo
 
             if (showFrenetFrameBox && frenetFrameBoxIndex == ((i * numSteps) + j))
             {
-                //frenetFrameBox[0].setX( catPoints[frenetFrameBoxIndex++].x() + norm.x()*fbSize - biNorm.x()*fbSize - vel.x()*fbSize);
+                frenetFrameBox[0].setX( catPoints[frenetFrameBoxIndex].x() + norm.x()*fbSize - biNorm.x()*fbSize - vel.x()*fbSize);
+                frenetFrameBox[0].setY( catPoints[frenetFrameBoxIndex].y() + norm.y()*fbSize - biNorm.y()*fbSize - vel.y()*fbSize);
+                frenetFrameBox[0].setZ( catPoints[frenetFrameBoxIndex].z() + norm.z()*fbSize - biNorm.z()*fbSize - vel.z()*fbSize);
+
+                frenetFrameBox[1].setX( catPoints[frenetFrameBoxIndex].x() + norm.x()*fbSize - biNorm.x()*fbSize + vel.x()*fbSize);
+                frenetFrameBox[1].setY( catPoints[frenetFrameBoxIndex].y() + norm.y()*fbSize - biNorm.y()*fbSize + vel.y()*fbSize);
+                frenetFrameBox[1].setZ( catPoints[frenetFrameBoxIndex].z() + norm.z()*fbSize - biNorm.z()*fbSize + vel.z()*fbSize);
+
+                frenetFrameBox[2].setX( catPoints[frenetFrameBoxIndex].x() + norm.x()*fbSize + biNorm.x()*fbSize + vel.x()*fbSize);
+                frenetFrameBox[2].setY( catPoints[frenetFrameBoxIndex].y() + norm.y()*fbSize + biNorm.y()*fbSize + vel.y()*fbSize);
+                frenetFrameBox[2].setZ( catPoints[frenetFrameBoxIndex].z() + norm.z()*fbSize + biNorm.z()*fbSize + vel.z()*fbSize);
+
+                frenetFrameBox[3].setX( catPoints[frenetFrameBoxIndex].x() + norm.x()*fbSize + biNorm.x()*fbSize - vel.x()*fbSize);
+                frenetFrameBox[3].setY( catPoints[frenetFrameBoxIndex].y() + norm.y()*fbSize + biNorm.y()*fbSize - vel.y()*fbSize);
+                frenetFrameBox[3].setZ( catPoints[frenetFrameBoxIndex].z() + norm.z()*fbSize + biNorm.z()*fbSize - vel.z()*fbSize);
+
+                frenetFrameBox[4].setX( catPoints[frenetFrameBoxIndex].x() - norm.x()*fbSize - biNorm.x()*fbSize - vel.x()*fbSize);
+                frenetFrameBox[4].setY( catPoints[frenetFrameBoxIndex].y() - norm.y()*fbSize - biNorm.y()*fbSize - vel.y()*fbSize);
+                frenetFrameBox[4].setZ( catPoints[frenetFrameBoxIndex].z() - norm.z()*fbSize - biNorm.z()*fbSize - vel.z()*fbSize);
+
+                frenetFrameBox[5].setX( catPoints[frenetFrameBoxIndex].x() - norm.x()*fbSize - biNorm.x()*fbSize + vel.x()*fbSize);
+                frenetFrameBox[5].setY( catPoints[frenetFrameBoxIndex].y() - norm.y()*fbSize - biNorm.y()*fbSize + vel.y()*fbSize);
+                frenetFrameBox[5].setZ( catPoints[frenetFrameBoxIndex].z() - norm.z()*fbSize - biNorm.z()*fbSize + vel.z()*fbSize);
+
+                frenetFrameBox[6].setX( catPoints[frenetFrameBoxIndex].x() - norm.x()*fbSize + biNorm.x()*fbSize + vel.x()*fbSize);
+                frenetFrameBox[6].setY( catPoints[frenetFrameBoxIndex].y() - norm.y()*fbSize + biNorm.y()*fbSize + vel.y()*fbSize);
+                frenetFrameBox[6].setZ( catPoints[frenetFrameBoxIndex].z() - norm.z()*fbSize + biNorm.z()*fbSize + vel.z()*fbSize);
+
+                frenetFrameBox[7].setX( catPoints[frenetFrameBoxIndex].x() - norm.x()*fbSize + biNorm.x()*fbSize - vel.x()*fbSize);
+                frenetFrameBox[7].setY( catPoints[frenetFrameBoxIndex].y() - norm.y()*fbSize + biNorm.y()*fbSize - vel.y()*fbSize);
+                frenetFrameBox[7].setZ( catPoints[frenetFrameBoxIndex].z() - norm.z()*fbSize + biNorm.z()*fbSize - vel.z()*fbSize);
 
                 mPoint = catPoints[frenetFrameBoxIndex];
                 drawFrenetFrameBox();
