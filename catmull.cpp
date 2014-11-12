@@ -418,7 +418,6 @@ QVector<QVector3D> catmull::findCatPoints()
     double t = double(tensionValue)/50.0;
     double step = 1.0/double(numSteps);
     double u;
-    qDebug() << "New Set of Points";
 
     for (int i = 0; i < (lastpt - 3); i++)  // Loop through the number of segments (# control points - 3)
     {
@@ -438,12 +437,17 @@ QVector<QVector3D> catmull::findCatPoints()
                      double(pnts[i+2][2]) * (t*u + (3-2*t)*u*u + (t-2)*u*u*u) + \
                      double(pnts[i+3][2]) * (-t*u*u + t*u*u*u));
             catPoints.append(QVector3D(stepX, stepY, stepZ));
-            qDebug() << catPoints[j];
+
             u += step;
         }
     }
-
     return catPoints;
+}
+
+double catmull::arcLength(QVector3D arcStart, QVector3D arcEnd)
+{
+    // This function is not doing anything.  I may redefine it later and use it.
+    return arcStart.x() + arcEnd.x();
 }
 
 void catmull::drawCatmull(QVector<QVector3D> catPoints)

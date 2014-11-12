@@ -87,6 +87,7 @@ private:
     QVector< QVector<QVector3D> > findGenCylPoints();
     void drawCatmull(QVector<QVector3D> catPoints);
     void drawGenCyl(QVector< QVector<QVector3D> > genCylPoints);
+    double arcLength(QVector3D arcStart, QVector3D arcEnd);
 
     int tensionValue;
     bool showControlPoints;
