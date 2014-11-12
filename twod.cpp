@@ -48,6 +48,29 @@ void twod::paintGL()
     }
     else ;  // Do nothing
 
+    if (window == catmull::XY)
+    {
+        glColor3f(1.0f, 0.0f, 0.0f);
+        drawLine(-400, 0, 0, 400, 0, 0);
+        glColor3f(0.0f, 1.0f, 0.0f);
+        drawLine(0, -400, 0, 0, 400, 0);
+    }
+    else if (window == catmull::XZ)
+    {
+        glColor3f(1.0f, 0.0f, 0.0f);
+        drawLine(-400, 0, 0, 400, 0, 0);
+        glColor3f(0.0f, 0.0f, 1.0f);
+        drawLine(0, 0, -400, 0, 0, 400);
+    }
+    else  //(window == catmull::ZY)
+    {
+        glColor3f(0.0f, 0.0f, 1.0f);
+        drawLine(0, 0, -400, 0, 0, 400);
+        glColor3f(0.0f, 1.0f, 0.0f);
+        drawLine(0, -400, 0, 0, 400, 0);
+
+    }
+
     catt->draw();
 }
 

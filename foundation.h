@@ -41,6 +41,7 @@ typedef int bool;
 #include <QVector3D>
 #include <QVector>
 #include <QMatrix3x3>
+#include <QTime>
 
 
 
