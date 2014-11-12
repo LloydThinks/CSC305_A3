@@ -33,9 +33,9 @@ catmull::catmull()
     radius = 50.0;
 
     frenetFrameBoxIndex = 0;
-    fbSize = 50.0;
+    fbSize = 25.0;
     frenetFrameBox = QVector<QVector3D>(8);
-    // TESTING
+
     frenetFrameBox[0] = QVector3D(-50, 50, 50);
     frenetFrameBox[1] = QVector3D(-50 , 50, -50);
     frenetFrameBox[2] = QVector3D(50, 50, -50);
@@ -48,12 +48,10 @@ catmull::catmull()
     showControlPoints = true;
     showControlLines = true;
     showCatmullRom = true;
-    showGeneralizedCylinder = false;
+    showGeneralizedCylinder = true;
     showFrenetFrameBox = true;
 
     time.start();
-
-    mPoint = QVector3D(0,0,0);
 }
 
 catmull::~catmull()
@@ -228,8 +226,9 @@ void catmull::draw()
 
 void catmull::drawFrenetFrameBox()
 {
-    glColor3f(0.129f, 0.850f, 0.768f);
-    drawPoint(mPoint.x(), mPoint.y(), mPoint.z(), 5);
+    //glColor3f(0.129f, 0.850f, 0.768f);
+    glColor3f(1.0f, 0.0f, 0.0f);
+
     // Draw Top of Frenet Box
     drawLine(frenetFrameBox[0].x(), frenetFrameBox[0].y(), frenetFrameBox[0].z(),
              frenetFrameBox[1].x(), frenetFrameBox[1].y(), frenetFrameBox[1].z());
@@ -404,13 +403,8 @@ QVector< QVector<QVector3D> > catmull::findGenCylPoints(QVector<QVector3D> catPo
                 frenetFrameBox[7].setY( catPoints[frenetFrameBoxIndex].y() - norm.y()*fbSize + biNorm.y()*fbSize - vel.y()*fbSize);
                 frenetFrameBox[7].setZ( catPoints[frenetFrameBoxIndex].z() - norm.z()*fbSize + biNorm.z()*fbSize - vel.z()*fbSize);
 
-                mPoint = catPoints[frenetFrameBoxIndex];
                 drawFrenetFrameBox();
             }
-
-
-
-
 
             u += step;
         }
@@ -425,7 +419,6 @@ void catmull::drawGenCyl(QVector< QVector<QVector3D> > genCylPoints)
         drawWireFrame(genCylPoints[i], genCylPoints[i + 1]);
 //        drawCylinder(genCylPoints[i], genCylPoints[i + 1]);
     }
-    qDebug() << "TEST";
 }
 
 double catmull::arcLength(QVector3D arcStart, QVector3D arcEnd)
@@ -439,11 +432,13 @@ QVector<QVector3D> catmull::find3dCirclePoints(QVector3D norm, QVector3D biNorm,
     double cX = 0.0;
     double cY = 1.0;
     QVector<QVector3D> cPoints;
-
+    //radius = 50;
     for (int i = 0; i < numCircleSegs; i++)
     {
         cX = radius*cos((2*M_PI*i)/numCircleSegs);
         cY = radius*sin((2*M_PI*i)/numCircleSegs);
+
+        //radius+= 10;
 
         cPoints.append(QVector3D(point.x() + cX*norm.x() + cY*biNorm.x(),
                                  point.y() + cX*norm.y() + cY*biNorm.y(),

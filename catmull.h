@@ -95,8 +95,6 @@ private:
     void drawFrenetFrameBox();
     double fbSize;
 
-    QVector3D mPoint;
-
     int tensionValue;
     bool showControlPoints;
     bool showControlLines;
