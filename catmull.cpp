@@ -422,11 +422,8 @@ void catmull::drawGenCyl(QVector< QVector<QVector3D> > genCylPoints)
     {
         if (drawCylinderEnabled)
             drawCylinder(genCylPoints[i], genCylPoints[i + 1]);
-        else if (drawWireFrameEnabled)
+        else  // (drawWireFrameEnabled || drawWireFrameHeart)
             drawWireFrame(genCylPoints[i], genCylPoints[i + 1]);
-        else  // (drawWireFrameHeartEnabled)
-            ;
-//        drawWireFrameHeart(genCylPoints[i], genCylPoints[i + 1]);
     }
 }
 
@@ -438,16 +435,22 @@ double catmull::arcLength(QVector3D arcStart, QVector3D arcEnd)
 
 QVector<QVector3D> catmull::find3dCirclePoints(QVector3D norm, QVector3D biNorm, QVector3D point)
 {
-    double cX = 0.0;
-    double cY = 1.0;
+    double cX, cY;
     QVector<QVector3D> cPoints;
     //radius = 50;
     for (int i = 0; i < numCircleSegs; i++)
     {
-        cX = radius*cos((2*M_PI*i)/numCircleSegs);
-        cY = radius*sin((2*M_PI*i)/numCircleSegs);
-
-        //radius+= 10;
+        if (drawWireFrameEnabled)
+        {
+            cX = radius*cos((2*M_PI*i)/numCircleSegs);
+            cY = radius*sin((2*M_PI*i)/numCircleSegs);
+        }
+        else
+        {
+            cX = (radius/10)*(16*sin((2*M_PI*i)/numCircleSegs)*sin((2*M_PI*i)/numCircleSegs)*sin((2*M_PI*i)/numCircleSegs));
+            cY = (radius/10)*(13*cos(((2*M_PI*i)/numCircleSegs)) - 5*cos(2*((2*M_PI*i)/numCircleSegs)) -\
+                    2*cos(3*((2*M_PI*i)/numCircleSegs)) - cos(4*((2*M_PI*i)/numCircleSegs)));
+        }
 
         cPoints.append(QVector3D(point.x() + cX*norm.x() + cY*biNorm.x(),
                                  point.y() + cX*norm.y() + cY*biNorm.y(),
@@ -642,7 +645,6 @@ void catmull::genCyl(bool enabled)
 
 void catmull::triangleMesh(bool enabled)
 {
-    qDebug() << "triangle mesh";
     drawCylinderEnabled = enabled;
 }
 
