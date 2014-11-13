@@ -29,7 +29,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>300</y>
+        <y>490</y>
         <width>150</width>
         <height>32</height>
        </rect>
@@ -38,49 +38,11 @@
        <string>Change Look-At</string>
       </property>
      </widget>
-     <widget class="QGroupBox" name="groupBox_2">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>230</y>
-        <width>150</width>
-        <height>51</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>Tension</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-      <widget class="QSlider" name="horizontalSlider">
-       <property name="geometry">
-        <rect>
-         <x>5</x>
-         <y>23</y>
-         <width>140</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>200</number>
-       </property>
-       <property name="sliderPosition">
-        <number>25</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </widget>
      <widget class="QGroupBox" name="groupBox_3">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>30</y>
+        <y>19</y>
         <width>150</width>
         <height>80</height>
        </rect>
@@ -128,13 +90,13 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>120</y>
+        <y>100</y>
         <width>150</width>
-        <height>101</height>
+        <height>135</height>
        </rect>
       </property>
       <property name="title">
-       <string>User System</string>
+       <string>Catmull-Rom</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -187,6 +149,267 @@
         <bool>true</bool>
        </property>
       </widget>
+      <widget class="QLabel" name="label_3">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>95</y>
+         <width>130</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Tension&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+      <widget class="QSlider" name="horizontalSlider">
+       <property name="geometry">
+        <rect>
+         <x>5</x>
+         <y>110</y>
+         <width>140</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>200</number>
+       </property>
+       <property name="sliderPosition">
+        <number>25</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_5">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>236</y>
+        <width>150</width>
+        <height>230</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Generalized Cylinder</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <widget class="QSlider" name="horizontalSlider_2">
+       <property name="geometry">
+        <rect>
+         <x>5</x>
+         <y>122</y>
+         <width>140</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>0</number>
+       </property>
+       <property name="maximum">
+        <number>200</number>
+       </property>
+       <property name="sliderPosition">
+        <number>50</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>107</y>
+         <width>130</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Radius&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_2">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>147</y>
+         <width>130</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Circumference Complexity&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QSlider" name="horizontalSlider_3">
+       <property name="geometry">
+        <rect>
+         <x>5</x>
+         <y>162</y>
+         <width>140</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="sliderPosition">
+        <number>25</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_4">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>187</y>
+         <width>130</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Segment Complexity&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QSlider" name="horizontalSlider_4">
+       <property name="geometry">
+        <rect>
+         <x>5</x>
+         <y>202</y>
+         <width>140</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="sliderPosition">
+        <number>25</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="radioButton_2">
+       <property name="geometry">
+        <rect>
+         <x>5</x>
+         <y>40</y>
+         <width>140</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Traingle Mesh</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="radioButton_3">
+       <property name="geometry">
+        <rect>
+         <x>5</x>
+         <y>80</y>
+         <width>140</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Wire Frame - Heart</string>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="radioButton">
+       <property name="geometry">
+        <rect>
+         <x>5</x>
+         <y>60</y>
+         <width>140</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Wire Frame - Cylinder</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>8</width>
+         <height>8</height>
+        </size>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="radioButton_4">
+       <property name="geometry">
+        <rect>
+         <x>5</x>
+         <y>20</y>
+         <width>140</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>No Cylinder</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_6">
+      <property name="geometry">
+       <rect>
+        <x>15</x>
+        <y>467</y>
+        <width>150</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Frenet Frame Box</string>
+      </property>
      </widget>
     </widget>
    </item>
@@ -262,8 +485,8 @@
      <y>32</y>
     </hint>
     <hint type="destinationlabel">
-     <x>194</x>
-     <y>215</y>
+     <x>628</x>
+     <y>55</y>
     </hint>
    </hints>
   </connection>
@@ -306,12 +529,12 @@
    <slot>changeLookAt()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>123</x>
-     <y>443</y>
+     <x>135</x>
+     <y>570</y>
     </hint>
     <hint type="destinationlabel">
-     <x>188</x>
-     <y>460</y>
+     <x>190</x>
+     <y>562</y>
     </hint>
    </hints>
   </connection>
@@ -322,12 +545,12 @@
    <slot>tensionSlider(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>154</x>
-     <y>508</y>
+     <x>166</x>
+     <y>284</y>
     </hint>
     <hint type="destinationlabel">
-     <x>190</x>
-     <y>504</y>
+     <x>188</x>
+     <y>273</y>
     </hint>
    </hints>
   </connection>
@@ -338,12 +561,12 @@
    <slot>groundPlane(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>141</x>
-     <y>195</y>
+     <x>153</x>
+     <y>115</y>
     </hint>
     <hint type="destinationlabel">
-     <x>189</x>
-     <y>194</y>
+     <x>190</x>
+     <y>108</y>
     </hint>
    </hints>
   </connection>
@@ -354,12 +577,12 @@
    <slot>axis(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>131</x>
-     <y>253</y>
+     <x>143</x>
+     <y>139</y>
     </hint>
     <hint type="destinationlabel">
-     <x>189</x>
-     <y>252</y>
+     <x>190</x>
+     <y>134</y>
     </hint>
    </hints>
   </connection>
@@ -370,12 +593,12 @@
    <slot>controlPoints(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>126</x>
-     <y>303</y>
+     <x>138</x>
+     <y>195</y>
     </hint>
     <hint type="destinationlabel">
-     <x>191</x>
-     <y>303</y>
+     <x>189</x>
+     <y>187</y>
     </hint>
    </hints>
   </connection>
@@ -386,12 +609,12 @@
    <slot>catmullRom(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>132</x>
-     <y>407</y>
+     <x>144</x>
+     <y>244</y>
     </hint>
     <hint type="destinationlabel">
-     <x>190</x>
-     <y>405</y>
+     <x>188</x>
+     <y>237</y>
     </hint>
    </hints>
   </connection>
@@ -402,12 +625,124 @@
    <slot>controlLines(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>161</x>
-     <y>356</y>
+     <x>166</x>
+     <y>219</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>191</x>
+     <y>216</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_2</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>frmMain</receiver>
+   <slot>genCylRadius(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>164</x>
+     <y>420</y>
     </hint>
     <hint type="destinationlabel">
      <x>190</x>
-     <y>355</y>
+     <y>431</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_3</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>frmMain</receiver>
+   <slot>genCylCircComplexity(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>160</x>
+     <y>460</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>189</x>
+     <y>463</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_4</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>frmMain</receiver>
+   <slot>genCylSegComplexity(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>153</x>
+     <y>502</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>190</x>
+     <y>503</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_6</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frmMain</receiver>
+   <slot>frenetFrameBox(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>172</x>
+     <y>525</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>191</x>
+     <y>530</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frmMain</receiver>
+   <slot>wireFrameCyl(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>158</x>
+     <y>359</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>190</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_4</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frmMain</receiver>
+   <slot>genCyl(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>147</x>
+     <y>320</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>190</x>
+     <y>318</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_2</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frmMain</receiver>
+   <slot>triangleMesh(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>152</x>
+     <y>339</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>189</x>
+     <y>343</y>
     </hint>
    </hints>
   </connection>
@@ -420,5 +755,13 @@
   <slot>axis(bool)</slot>
   <slot>catmullRom(bool)</slot>
   <slot>controlLines(bool)</slot>
+  <slot>genCylRadius(int)</slot>
+  <slot>genCylCircComplexity(int)</slot>
+  <slot>genCylSegComplexity(int)</slot>
+  <slot>triangleMesh(bool)</slot>
+  <slot>wireFrameCyl(bool)</slot>
+  <slot>wireFrameHeart(bool)</slot>
+  <slot>frenetFrameBox(bool)</slot>
+  <slot>genCyl(bool)</slot>
  </slots>
 </ui>

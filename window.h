@@ -31,6 +31,13 @@ public slots:
     void controlLines(bool showControlLines);
     void catmullRom(bool showCatmullRom);
 
+    void genCylRadius(int radius);
+    void genCylCircComplexity(int complexity);
+    void genCylSegComplexity(int complexity);
+    void triangleMesh(bool enabled);
+    void wireFrameCyl(bool enabled);
+    void frenetFrameBox(bool enabled);
+    void genCyl(bool enabled);
 	
 private:
     GLWidget *m_glWidget;

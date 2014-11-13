@@ -46,10 +46,12 @@ catmull::catmull()
     frenetFrameBox[7] = QVector3D(50, -50, 50);
 
     showControlPoints = true;
-    showControlLines = true;
+    showControlLines = false;
     showCatmullRom = true;
-    showGeneralizedCylinder = true;
-    showFrenetFrameBox = true;
+    showGeneralizedCylinder = false;
+    showFrenetFrameBox = false;
+    drawCylinderEnabled = false;
+    drawWireFrameEnabled = false;
 
     time.start();
 }
@@ -361,11 +363,13 @@ QVector< QVector<QVector3D> > catmull::findGenCylPoints(QVector<QVector3D> catPo
 
 
             // Moves the frenet frame cube every X milliseconds
-            if ( time.elapsed() > 500 && frenetFrameBoxIndex == ((i * numSteps) + j) )
+            if (frenetFrameBoxIndex >= catPoints.size())
+                frenetFrameBoxIndex = 0;
+            if ( time.elapsed() > 20 && frenetFrameBoxIndex == ((i * numSteps) + j) )
             {
                 time.restart();
 
-                if (++frenetFrameBoxIndex == catPoints.size())
+                if (++frenetFrameBoxIndex >= catPoints.size())
                     frenetFrameBoxIndex = 0;
             }
 
@@ -416,8 +420,13 @@ void catmull::drawGenCyl(QVector< QVector<QVector3D> > genCylPoints)
 {
     for (int i = 0; i < (genCylPoints.size() - 1); i++)
     {
-        drawWireFrame(genCylPoints[i], genCylPoints[i + 1]);
-//        drawCylinder(genCylPoints[i], genCylPoints[i + 1]);
+        if (drawCylinderEnabled)
+            drawCylinder(genCylPoints[i], genCylPoints[i + 1]);
+        else if (drawWireFrameEnabled)
+            drawWireFrame(genCylPoints[i], genCylPoints[i + 1]);
+        else  // (drawWireFrameHeartEnabled)
+            ;
+//        drawWireFrameHeart(genCylPoints[i], genCylPoints[i + 1]);
     }
 }
 
@@ -611,3 +620,38 @@ void catmull::drawCurve(int pnt1[], int pnt2[], int pnt3[], int pnt4[], QVector3
     }
 }
 
+void catmull::genCylRadius(int tradius)
+{
+    radius = tradius;
+}
+
+void catmull::genCylCircComplexity(int complexity)
+{
+    numCircleSegs = complexity;
+}
+
+void catmull::genCylSegComplexity(int complexity)
+{
+    numSteps = complexity;
+}
+
+void catmull::genCyl(bool enabled)
+{
+    showGeneralizedCylinder = !enabled;
+}
+
+void catmull::triangleMesh(bool enabled)
+{
+    qDebug() << "triangle mesh";
+    drawCylinderEnabled = enabled;
+}
+
+void catmull::wireFrameCyl(bool enabled)
+{
+    drawWireFrameEnabled = enabled;
+}
+
+void catmull::frenetFrameBoxFunc(bool enabled)
+{
+    showFrenetFrameBox = enabled;
+}

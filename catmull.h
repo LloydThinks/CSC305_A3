@@ -61,6 +61,15 @@ public:
     void controlLines(bool showControlLinesL);
     void catmullRom(bool showCatmullRomL);
 
+public slots:
+    void genCylRadius(int tradius);
+    void genCylCircComplexity(int complexity);
+    void genCylSegComplexity(int complexity);
+    void triangleMesh(bool enabled);
+    void wireFrameCyl(bool enabled);
+    void frenetFrameBoxFunc(bool enabled);
+    void genCyl(bool enabled);
+
 private:
 	double arc[numStepsMax][2];  // the table holds 
 	// 0 = t value linear  1 = distance to previous point
@@ -101,6 +110,8 @@ private:
     bool showCatmullRom;
     bool showGeneralizedCylinder;
     bool showFrenetFrameBox;
+    bool drawCylinderEnabled;
+    bool drawWireFrameEnabled;
     double numCircleSegs;
     double radius;
 };

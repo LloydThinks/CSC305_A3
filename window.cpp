@@ -100,3 +100,38 @@ void Window::catmullRom(bool showCatmullRom)
 {
     catt->catmullRom(showCatmullRom);
 }
+
+void Window::genCylRadius(int radius)
+{
+    catt->genCylRadius(radius);
+}
+
+void Window::genCylCircComplexity(int complexity)
+{
+    catt->genCylCircComplexity(complexity);
+}
+
+void Window::genCylSegComplexity(int complexity)
+{
+    catt->genCylSegComplexity(complexity);
+}
+
+void Window::triangleMesh(bool enabled)
+{
+    catt->triangleMesh(enabled);
+}
+
+void Window::wireFrameCyl(bool enabled)
+{
+    catt->wireFrameCyl(enabled);
+}
+
+void Window::frenetFrameBox(bool enabled)
+{
+    catt->frenetFrameBoxFunc(enabled);
+}
+
+void Window::genCyl(bool enabled)
+{
+    catt->genCyl(enabled);
+}
