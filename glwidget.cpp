@@ -50,6 +50,35 @@ void GLWidget::clear()
 
 void GLWidget::initializeGL()
 {
+    //glClearColor( 0.5, 1.0, 0.75, 0.0 ); // Let OpenGL clear to black
+
+    glEnable (GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+
+    GLfloat ambientLight[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+    GLfloat specularLight[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+    GLfloat position[] = { 50, 50, 50, 1.0f };
+    GLfloat diffuseLight[] = { 0.8f, 0.8f, 0.8, 1.0f };
+
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
+
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuseLight);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, specularLight);
+
+    glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);// enable diffuse
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);// enable diffuse
+    glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight);// enable specular
+    glLightfv(GL_LIGHT0, GL_POSITION, position);
+
+    glShadeModel( GL_SMOOTH );
+
+    glFrontFace(GL_CCW);
+    glEnable( GL_COLOR_MATERIAL );
+    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+    glEnable(GL_NORMALIZE);
 }
 
 void GLWidget::redraw()
@@ -59,7 +88,8 @@ void GLWidget::redraw()
 
 void GLWidget::paintGL()
 {
-    glClear( GL_COLOR_BUFFER_BIT );
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glLoadIdentity();
     gluLookAt(xfrom,yfrom,zfrom, xto, yto, zto, 0.0, 1.0, 0.0);

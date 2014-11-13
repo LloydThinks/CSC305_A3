@@ -222,7 +222,7 @@ void catmull::draw()
         if (showCatmullRom)
             drawCatmull(catPoints);
         if (showGeneralizedCylinder)
-            drawGenCyl(genCylPoints);
+            drawGenCyl(genCylPoints, catPoints);
     }
 }
 
@@ -416,12 +416,12 @@ QVector< QVector<QVector3D> > catmull::findGenCylPoints(QVector<QVector3D> catPo
     return genCylPoints;
 }
 
-void catmull::drawGenCyl(QVector< QVector<QVector3D> > genCylPoints)
+void catmull::drawGenCyl(QVector< QVector<QVector3D> > genCylPoints, QVector<QVector3D> catPoints)
 {
     for (int i = 0; i < (genCylPoints.size() - 1); i++)
     {
         if (drawCylinderEnabled)
-            drawCylinder(genCylPoints[i], genCylPoints[i + 1]);
+            drawCylinder(genCylPoints[i], genCylPoints[i + 1], catPoints[i+1]);
         else  // (drawWireFrameEnabled || drawWireFrameHeart)
             drawWireFrame(genCylPoints[i], genCylPoints[i + 1]);
     }
@@ -440,7 +440,7 @@ QVector<QVector3D> catmull::find3dCirclePoints(QVector3D norm, QVector3D biNorm,
     //radius = 50;
     for (int i = 0; i < numCircleSegs; i++)
     {
-        if (drawWireFrameEnabled)
+        if (drawWireFrameEnabled || drawCylinderEnabled)
         {
             cX = radius*cos((2*M_PI*i)/numCircleSegs);
             cY = radius*sin((2*M_PI*i)/numCircleSegs);
@@ -459,9 +459,9 @@ QVector<QVector3D> catmull::find3dCirclePoints(QVector3D norm, QVector3D biNorm,
     return cPoints;
 }
 
-void catmull::drawCylinder(QVector<QVector3D> lastPoints, QVector<QVector3D> currentPoints)
+void catmull::drawCylinder(QVector<QVector3D> lastPoints, QVector<QVector3D> currentPoints, QVector3D center)
 {
-    QVector3D t0, t1, b0, b1;
+    QVector3D t0, t1, b0, b1, normal;
     b1 = lastPoints[lastPoints.size() - 1];
     t1 = currentPoints[currentPoints.size() - 1];
 
@@ -486,6 +486,10 @@ void catmull::drawCylinder(QVector<QVector3D> lastPoints, QVector<QVector3D> cur
         glVertex3f(t1.x(), t1.y(), t1.z());
 
         glEnd();
+
+        normal = (currentPoints[i] - center).normalized();
+        glNormal3d(normal.x(), normal.y(), normal.z());
+        glVertex3d(currentPoints[i].x(), currentPoints[i].y(), currentPoints[i].z());
     }
 }
 

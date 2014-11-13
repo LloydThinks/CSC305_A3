@@ -89,13 +89,13 @@ private:
     int motionType; // 0 = parameter value 1 = const velocity
 
     QVector<QVector3D> find3dCirclePoints(QVector3D norm, QVector3D biNorm, QVector3D point);
-    void drawCylinder(QVector<QVector3D> lastPoints, QVector<QVector3D> currentPoints);
+    void drawCylinder(QVector<QVector3D> lastPoints, QVector<QVector3D> currentPoints, QVector3D center);
     QVector3D vectorTransform(QVector3D v, QMatrix3x3 m);
     void drawWireFrame(QVector<QVector3D> lastPoints, QVector<QVector3D> currentPoints);
     QVector<QVector3D> findCatPoints();
     QVector< QVector<QVector3D> > findGenCylPoints(QVector<QVector3D> catPoints);
     void drawCatmull(QVector<QVector3D> catPoints);
-    void drawGenCyl(QVector< QVector<QVector3D> > genCylPoints);
+    void drawGenCyl(QVector< QVector<QVector3D> > genCylPoints, QVector<QVector3D> catPoints);
     double arcLength(QVector3D arcStart, QVector3D arcEnd);
 
     QTime time;
