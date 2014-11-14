@@ -310,12 +310,49 @@ void catmull::drawCatmull(QVector<QVector3D> catPoints)
 QVector< QVector<QVector3D> > catmull::findGenCylPoints(QVector<QVector3D> catPoints)
 {
     QVector< QVector<QVector3D> > genCylPoints = QVector< QVector<QVector3D> >();
-    QVector3D vel, acc, norm, biNorm;
-    double velX, velY, velZ, accX, accY, accZ;
+    QVector3D w, vel0, vel1, acc, norm, biNorm;
+    double velX, velY, velZ, accX, accY, accZ, theta;
     double t = double(tensionValue)/50.0;
     double step = 1.0/double(numSteps);
 
-    double u;
+    double u = 0;
+
+    // Calculate the first frenet frame using absolute calculations
+    velX = (double(pnts[0][0]) * (-t + 4*t*u - 3*t*u*u) + \
+            double(pnts[1][0]) * (2*(t-3)*u + 3*(2-t)*u*u) + \
+            double(pnts[2][0]) * (t + 2*(3-2*t)*u + 3*(t-2)*u*u) + \
+            double(pnts[3][0]) * (-2*t*u + 3*t*u*u));
+    velY = (double(pnts[0][1]) * (-t + 4*t*u - 3*t*u*u) + \
+            double(pnts[1][1]) * (2*(t-3)*u + 3*(2-t)*u*u) + \
+            double(pnts[2][1]) * (t + 2*(3-2*t)*u + 3*(t-2)*u*u) + \
+            double(pnts[3][1]) * (-2*t*u + 3*t*u*u));
+    velZ = (double(pnts[0][2]) * (-t + 4*t*u - 3*t*u*u) + \
+            double(pnts[1][2]) * (2*(t-3)*u + 3*(2-t)*u*u) + \
+            double(pnts[2][2]) * (t + 2*(3-2*t)*u + 3*(t-2)*u*u) + \
+            double(pnts[3][2]) * (-2*t*u + 3*t*u*u));
+
+    accX = (double(pnts[0][0]) * (4*t - 6*t*u) + \
+            double(pnts[1][0]) * (2*(t-3) + 6*(2-t)*u) + \
+            double(pnts[2][0]) * (2*(3-2*t) + 6*(t-2)*u) + \
+            double(pnts[3][0]) * (-2*t + 6*t*u));
+    accY = (double(pnts[0][1]) * (4*t - 6*t*u) + \
+            double(pnts[1][1]) * (2*(t-3) + 6*(2-t)*u) + \
+            double(pnts[2][1]) * (2*(3-2*t) + 6*(t-2)*u) + \
+            double(pnts[3][1]) * (-2*t + 6*t*u));
+    accZ = (double(pnts[0][2]) * (4*t - 6*t*u) + \
+            double(pnts[1][2]) * (2*(t-3) + 6*(2-t)*u) + \
+            double(pnts[2][2]) * (2*(3-2*t) + 6*(t-2)*u) + \
+            double(pnts[3][2]) * (-2*t + 6*t*u));
+
+    // Create the velocity and acceleration vectors
+    vel0 = QVector3D(velX, velY, velZ).normalized();
+    acc = QVector3D(accX, accY, accZ).normalized();
+
+    // Binormal vector is vel X acc
+    biNorm = QVector3D::crossProduct(vel0, acc).normalized();
+
+    // Normal vector is vel X biNorm
+    norm = QVector3D::crossProduct(vel0, biNorm).normalized();
 
     for (int i = 0; i < (lastpt - 3); i++)  // Loop through the number of segments (# control points - 3)
     {
@@ -334,29 +371,39 @@ QVector< QVector<QVector3D> > catmull::findGenCylPoints(QVector<QVector3D> catPo
                     double(pnts[i+1][2]) * (2*(t-3)*u + 3*(2-t)*u*u) + \
                     double(pnts[i+2][2]) * (t + 2*(3-2*t)*u + 3*(t-2)*u*u) + \
                     double(pnts[i+3][2]) * (-2*t*u + 3*t*u*u));
+            vel1 = QVector3D(velX, velY, velZ).normalized();
 
-            accX = (double(pnts[i  ][0]) * (4*t - 6*t*u) + \
-                    double(pnts[i+1][0]) * (2*(t-3) + 6*(2-t)*u) + \
-                    double(pnts[i+2][0]) * (2*(3-2*t) + 6*(t-2)*u) + \
-                    double(pnts[i+3][0]) * (-2*t + 6*t*u));
-            accY = (double(pnts[i  ][1]) * (4*t - 6*t*u) + \
-                    double(pnts[i+1][1]) * (2*(t-3) + 6*(2-t)*u) + \
-                    double(pnts[i+2][1]) * (2*(3-2*t) + 6*(t-2)*u) + \
-                    double(pnts[i+3][1]) * (-2*t + 6*t*u));
-            accZ = (double(pnts[i  ][2]) * (4*t - 6*t*u) + \
-                    double(pnts[i+1][2]) * (2*(t-3) + 6*(2-t)*u) + \
-                    double(pnts[i+2][2]) * (2*(3-2*t) + 6*(t-2)*u) + \
-                    double(pnts[i+3][2]) * (-2*t + 6*t*u));
+            w = QVector3D::crossProduct(vel0, vel1).normalized();
 
-            // Create the velocity and acceleration vectors
-            vel = QVector3D(velX, velY, velZ).normalized();
-            acc = QVector3D(accX, accY, accZ).normalized();
+            theta = acos(QVector3D::dotProduct(vel0, vel1)/(vel0.length()*vel1.length()));
 
-            // Binormal vector is vel X acc
-            biNorm = QVector3D::crossProduct(vel, acc).normalized();
+            biNorm = (cos(theta)*biNorm + (sin(theta))*(QVector3D::crossProduct(w, biNorm)) + \
+                      (1 - cos(theta))*(QVector3D::dotProduct(w, biNorm))*w).normalized();
 
-            // Normal vector is vel X biNorm
-            norm = QVector3D::crossProduct(vel, biNorm).normalized();
+            norm = QVector3D::crossProduct(vel1, biNorm).normalized();
+
+//            accX = (double(pnts[i  ][0]) * (4*t - 6*t*u) + \
+//                    double(pnts[i+1][0]) * (2*(t-3) + 6*(2-t)*u) + \
+//                    double(pnts[i+2][0]) * (2*(3-2*t) + 6*(t-2)*u) + \
+//                    double(pnts[i+3][0]) * (-2*t + 6*t*u));
+//            accY = (double(pnts[i  ][1]) * (4*t - 6*t*u) + \
+//                    double(pnts[i+1][1]) * (2*(t-3) + 6*(2-t)*u) + \
+//                    double(pnts[i+2][1]) * (2*(3-2*t) + 6*(t-2)*u) + \
+//                    double(pnts[i+3][1]) * (-2*t + 6*t*u));
+//            accZ = (double(pnts[i  ][2]) * (4*t - 6*t*u) + \
+//                    double(pnts[i+1][2]) * (2*(t-3) + 6*(2-t)*u) + \
+//                    double(pnts[i+2][2]) * (2*(3-2*t) + 6*(t-2)*u) + \
+//                    double(pnts[i+3][2]) * (-2*t + 6*t*u));
+
+//            // Create the velocity and acceleration vectors
+//            vel = QVector3D(velX, velY, velZ).normalized();
+//            acc = QVector3D(accX, accY, accZ).normalized();
+
+//            // Binormal vector is vel X acc
+//            biNorm = QVector3D::crossProduct(vel, acc).normalized();
+
+//            // Normal vector is vel X biNorm
+//            norm = QVector3D::crossProduct(vel, biNorm).normalized();
 
             genCylPoints.append(find3dCirclePoints(norm, biNorm,
                 QVector3D(catPoints[(i*numSteps) + j].x(), catPoints[(i*numSteps) + j].y(), catPoints[(i*numSteps) + j].z())));
@@ -375,40 +422,42 @@ QVector< QVector<QVector3D> > catmull::findGenCylPoints(QVector<QVector3D> catPo
 
             if (showFrenetFrameBox && frenetFrameBoxIndex == ((i * numSteps) + j))
             {
-                frenetFrameBox[0].setX( catPoints[frenetFrameBoxIndex].x() + norm.x()*fbSize - biNorm.x()*fbSize - vel.x()*fbSize);
-                frenetFrameBox[0].setY( catPoints[frenetFrameBoxIndex].y() + norm.y()*fbSize - biNorm.y()*fbSize - vel.y()*fbSize);
-                frenetFrameBox[0].setZ( catPoints[frenetFrameBoxIndex].z() + norm.z()*fbSize - biNorm.z()*fbSize - vel.z()*fbSize);
+                frenetFrameBox[0].setX( catPoints[frenetFrameBoxIndex].x() + norm.x()*fbSize - biNorm.x()*fbSize - vel1.x()*fbSize);
+                frenetFrameBox[0].setY( catPoints[frenetFrameBoxIndex].y() + norm.y()*fbSize - biNorm.y()*fbSize - vel1.y()*fbSize);
+                frenetFrameBox[0].setZ( catPoints[frenetFrameBoxIndex].z() + norm.z()*fbSize - biNorm.z()*fbSize - vel1.z()*fbSize);
 
-                frenetFrameBox[1].setX( catPoints[frenetFrameBoxIndex].x() + norm.x()*fbSize - biNorm.x()*fbSize + vel.x()*fbSize);
-                frenetFrameBox[1].setY( catPoints[frenetFrameBoxIndex].y() + norm.y()*fbSize - biNorm.y()*fbSize + vel.y()*fbSize);
-                frenetFrameBox[1].setZ( catPoints[frenetFrameBoxIndex].z() + norm.z()*fbSize - biNorm.z()*fbSize + vel.z()*fbSize);
+                frenetFrameBox[1].setX( catPoints[frenetFrameBoxIndex].x() + norm.x()*fbSize - biNorm.x()*fbSize + vel1.x()*fbSize);
+                frenetFrameBox[1].setY( catPoints[frenetFrameBoxIndex].y() + norm.y()*fbSize - biNorm.y()*fbSize + vel1.y()*fbSize);
+                frenetFrameBox[1].setZ( catPoints[frenetFrameBoxIndex].z() + norm.z()*fbSize - biNorm.z()*fbSize + vel1.z()*fbSize);
 
-                frenetFrameBox[2].setX( catPoints[frenetFrameBoxIndex].x() + norm.x()*fbSize + biNorm.x()*fbSize + vel.x()*fbSize);
-                frenetFrameBox[2].setY( catPoints[frenetFrameBoxIndex].y() + norm.y()*fbSize + biNorm.y()*fbSize + vel.y()*fbSize);
-                frenetFrameBox[2].setZ( catPoints[frenetFrameBoxIndex].z() + norm.z()*fbSize + biNorm.z()*fbSize + vel.z()*fbSize);
+                frenetFrameBox[2].setX( catPoints[frenetFrameBoxIndex].x() + norm.x()*fbSize + biNorm.x()*fbSize + vel1.x()*fbSize);
+                frenetFrameBox[2].setY( catPoints[frenetFrameBoxIndex].y() + norm.y()*fbSize + biNorm.y()*fbSize + vel1.y()*fbSize);
+                frenetFrameBox[2].setZ( catPoints[frenetFrameBoxIndex].z() + norm.z()*fbSize + biNorm.z()*fbSize + vel1.z()*fbSize);
 
-                frenetFrameBox[3].setX( catPoints[frenetFrameBoxIndex].x() + norm.x()*fbSize + biNorm.x()*fbSize - vel.x()*fbSize);
-                frenetFrameBox[3].setY( catPoints[frenetFrameBoxIndex].y() + norm.y()*fbSize + biNorm.y()*fbSize - vel.y()*fbSize);
-                frenetFrameBox[3].setZ( catPoints[frenetFrameBoxIndex].z() + norm.z()*fbSize + biNorm.z()*fbSize - vel.z()*fbSize);
+                frenetFrameBox[3].setX( catPoints[frenetFrameBoxIndex].x() + norm.x()*fbSize + biNorm.x()*fbSize - vel1.x()*fbSize);
+                frenetFrameBox[3].setY( catPoints[frenetFrameBoxIndex].y() + norm.y()*fbSize + biNorm.y()*fbSize - vel1.y()*fbSize);
+                frenetFrameBox[3].setZ( catPoints[frenetFrameBoxIndex].z() + norm.z()*fbSize + biNorm.z()*fbSize - vel1.z()*fbSize);
 
-                frenetFrameBox[4].setX( catPoints[frenetFrameBoxIndex].x() - norm.x()*fbSize - biNorm.x()*fbSize - vel.x()*fbSize);
-                frenetFrameBox[4].setY( catPoints[frenetFrameBoxIndex].y() - norm.y()*fbSize - biNorm.y()*fbSize - vel.y()*fbSize);
-                frenetFrameBox[4].setZ( catPoints[frenetFrameBoxIndex].z() - norm.z()*fbSize - biNorm.z()*fbSize - vel.z()*fbSize);
+                frenetFrameBox[4].setX( catPoints[frenetFrameBoxIndex].x() - norm.x()*fbSize - biNorm.x()*fbSize - vel1.x()*fbSize);
+                frenetFrameBox[4].setY( catPoints[frenetFrameBoxIndex].y() - norm.y()*fbSize - biNorm.y()*fbSize - vel1.y()*fbSize);
+                frenetFrameBox[4].setZ( catPoints[frenetFrameBoxIndex].z() - norm.z()*fbSize - biNorm.z()*fbSize - vel1.z()*fbSize);
 
-                frenetFrameBox[5].setX( catPoints[frenetFrameBoxIndex].x() - norm.x()*fbSize - biNorm.x()*fbSize + vel.x()*fbSize);
-                frenetFrameBox[5].setY( catPoints[frenetFrameBoxIndex].y() - norm.y()*fbSize - biNorm.y()*fbSize + vel.y()*fbSize);
-                frenetFrameBox[5].setZ( catPoints[frenetFrameBoxIndex].z() - norm.z()*fbSize - biNorm.z()*fbSize + vel.z()*fbSize);
+                frenetFrameBox[5].setX( catPoints[frenetFrameBoxIndex].x() - norm.x()*fbSize - biNorm.x()*fbSize + vel1.x()*fbSize);
+                frenetFrameBox[5].setY( catPoints[frenetFrameBoxIndex].y() - norm.y()*fbSize - biNorm.y()*fbSize + vel1.y()*fbSize);
+                frenetFrameBox[5].setZ( catPoints[frenetFrameBoxIndex].z() - norm.z()*fbSize - biNorm.z()*fbSize + vel1.z()*fbSize);
 
-                frenetFrameBox[6].setX( catPoints[frenetFrameBoxIndex].x() - norm.x()*fbSize + biNorm.x()*fbSize + vel.x()*fbSize);
-                frenetFrameBox[6].setY( catPoints[frenetFrameBoxIndex].y() - norm.y()*fbSize + biNorm.y()*fbSize + vel.y()*fbSize);
-                frenetFrameBox[6].setZ( catPoints[frenetFrameBoxIndex].z() - norm.z()*fbSize + biNorm.z()*fbSize + vel.z()*fbSize);
+                frenetFrameBox[6].setX( catPoints[frenetFrameBoxIndex].x() - norm.x()*fbSize + biNorm.x()*fbSize + vel1.x()*fbSize);
+                frenetFrameBox[6].setY( catPoints[frenetFrameBoxIndex].y() - norm.y()*fbSize + biNorm.y()*fbSize + vel1.y()*fbSize);
+                frenetFrameBox[6].setZ( catPoints[frenetFrameBoxIndex].z() - norm.z()*fbSize + biNorm.z()*fbSize + vel1.z()*fbSize);
 
-                frenetFrameBox[7].setX( catPoints[frenetFrameBoxIndex].x() - norm.x()*fbSize + biNorm.x()*fbSize - vel.x()*fbSize);
-                frenetFrameBox[7].setY( catPoints[frenetFrameBoxIndex].y() - norm.y()*fbSize + biNorm.y()*fbSize - vel.y()*fbSize);
-                frenetFrameBox[7].setZ( catPoints[frenetFrameBoxIndex].z() - norm.z()*fbSize + biNorm.z()*fbSize - vel.z()*fbSize);
+                frenetFrameBox[7].setX( catPoints[frenetFrameBoxIndex].x() - norm.x()*fbSize + biNorm.x()*fbSize - vel1.x()*fbSize);
+                frenetFrameBox[7].setY( catPoints[frenetFrameBoxIndex].y() - norm.y()*fbSize + biNorm.y()*fbSize - vel1.y()*fbSize);
+                frenetFrameBox[7].setZ( catPoints[frenetFrameBoxIndex].z() - norm.z()*fbSize + biNorm.z()*fbSize - vel1.z()*fbSize);
 
                 drawFrenetFrameBox();
             }
+
+            vel0 = vel1;
 
             u += step;
         }
