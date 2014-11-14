@@ -12,7 +12,7 @@ double myrand();
 void fatal(char *s);
 void drawPoint(double x, double y, double z, float radius);
 void drawLine(double x0, double y0, double x1, double y1);
-void drawLine(double x0, double y0, double z0, double x1, double y1, double z1 );
+void drawLine(double x0, double y0, double z0, double x1, double y1, double z1 , double width = 1.0f);
 
 void backCol();
 int sn(double posThresh);

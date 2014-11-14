@@ -30,7 +30,6 @@ public:
 
     void setxoff(int i){xoff=i;}
     void setyoff(int i){yoff=i;}
-    void drawCurve(int pnt1[3], int pnt2[3], int pnt3[3], int pnt4[3], QVector3D vel0, QVector3D norm, QVector3D biNorm);
     void clear(){lastpt=0;}
     void setHull(bool b){hull=b;}
     void animate();
@@ -71,8 +70,7 @@ public slots:
     void genCyl(bool enabled);
 
 private:
-	double arc[numStepsMax][2];  // the table holds 
-	// 0 = t value linear  1 = distance to previous point
+    double arc[numStepsMax][2];  // the table holds
 	int lastArc, error;
     int cpt, seg, tvmethod;
 
@@ -96,7 +94,6 @@ private:
     QVector< QVector<QVector3D> > findGenCylPoints(QVector<QVector3D> catPoints);
     void drawCatmull(QVector<QVector3D> catPoints);
     void drawGenCyl(QVector< QVector<QVector3D> > genCylPoints, QVector<QVector3D> catPoints);
-    double arcLength(QVector3D arcStart, QVector3D arcEnd);
 
     QTime time;
     int frenetFrameBoxIndex;

@@ -382,29 +382,6 @@ QVector< QVector<QVector3D> > catmull::findGenCylPoints(QVector<QVector3D> catPo
 
             norm = QVector3D::crossProduct(vel1, biNorm).normalized();
 
-//            accX = (double(pnts[i  ][0]) * (4*t - 6*t*u) + \
-//                    double(pnts[i+1][0]) * (2*(t-3) + 6*(2-t)*u) + \
-//                    double(pnts[i+2][0]) * (2*(3-2*t) + 6*(t-2)*u) + \
-//                    double(pnts[i+3][0]) * (-2*t + 6*t*u));
-//            accY = (double(pnts[i  ][1]) * (4*t - 6*t*u) + \
-//                    double(pnts[i+1][1]) * (2*(t-3) + 6*(2-t)*u) + \
-//                    double(pnts[i+2][1]) * (2*(3-2*t) + 6*(t-2)*u) + \
-//                    double(pnts[i+3][1]) * (-2*t + 6*t*u));
-//            accZ = (double(pnts[i  ][2]) * (4*t - 6*t*u) + \
-//                    double(pnts[i+1][2]) * (2*(t-3) + 6*(2-t)*u) + \
-//                    double(pnts[i+2][2]) * (2*(3-2*t) + 6*(t-2)*u) + \
-//                    double(pnts[i+3][2]) * (-2*t + 6*t*u));
-
-//            // Create the velocity and acceleration vectors
-//            vel = QVector3D(velX, velY, velZ).normalized();
-//            acc = QVector3D(accX, accY, accZ).normalized();
-
-//            // Binormal vector is vel X acc
-//            biNorm = QVector3D::crossProduct(vel, acc).normalized();
-
-//            // Normal vector is vel X biNorm
-//            norm = QVector3D::crossProduct(vel, biNorm).normalized();
-
             genCylPoints.append(find3dCirclePoints(norm, biNorm,
                 QVector3D(catPoints[(i*numSteps) + j].x(), catPoints[(i*numSteps) + j].y(), catPoints[(i*numSteps) + j].z())));
 
@@ -476,12 +453,6 @@ void catmull::drawGenCyl(QVector< QVector<QVector3D> > genCylPoints, QVector<QVe
     }
 }
 
-double catmull::arcLength(QVector3D arcStart, QVector3D arcEnd)
-{
-    // This function is not doing anything.  I may redefine it later and use it.
-    return arcStart.x() + arcEnd.x();
-}
-
 QVector<QVector3D> catmull::find3dCirclePoints(QVector3D norm, QVector3D biNorm, QVector3D point)
 {
     double cX, cY;
@@ -515,6 +486,7 @@ void catmull::drawCylinder(QVector<QVector3D> lastPoints, QVector<QVector3D> cur
     t1 = currentPoints[currentPoints.size() - 1];
 
     glColor3f(0.129f, 0.850f, 0.768f);
+
     for (int i = 0; i < numCircleSegs; i++)
     {
         b0 = b1;
@@ -533,7 +505,6 @@ void catmull::drawCylinder(QVector<QVector3D> lastPoints, QVector<QVector3D> cur
         glVertex3f(b1.x(), b1.y(), b1.z());
         glVertex3f(t0.x(), t0.y(), t0.z());
         glVertex3f(t1.x(), t1.y(), t1.z());
-
         glEnd();
 
         normal = (currentPoints[i] - center).normalized();
@@ -572,108 +543,6 @@ QVector3D catmull::vectorTransform(QVector3D v, QMatrix3x3 m)
     transformed.setY( ((m(1,0))*v.x()) + ((m(1,1))*v.y()) + ((m(1,2))*v.z()) );
     transformed.setZ( ((m(2,0))*v.x()) + ((m(2,1))*v.y()) + ((m(2,2))*v.z()) );
     return transformed;
-}
-
-void catmull::drawCurve(int pnt1[], int pnt2[], int pnt3[], int pnt4[], QVector3D vel0, QVector3D norm, QVector3D biNorm)
-{
-    // Save the original points per segment
-    double stepX0 = double(pnt2[0]);
-    double stepY0 = double(pnt2[1]);
-    double stepZ0 = double(pnt2[2]);
-    double stepX1, stepY1, stepZ1;
-    double t = double(tensionValue)/50.0;
-    double step = 1.0/double(numSteps);
-    double u = step;
-
-    // Generalized Cylinder Code
-    double sqx, sqy, sqz, cos, cos1, xycos1, yzcos1, zxcos1, sin, xsin, ysin, zsin;
-    double velX, velY, velZ;
-    QVector3D vel1;
-    QVector<QVector3D> lastPoints, currentPoints;
-
-    currentPoints = find3dCirclePoints(biNorm, norm, QVector3D(stepX0, stepY0, stepZ0));
-
-    // Each time through the loop, use a calculation on u to find the next step
-    // Each step is a point to be drawn
-    for (int i = 0; i < numSteps; i++)
-    {
-        stepX1 = (double(pnt1[0]) * (-t*u + 2*t*u*u - t*u*u*u) + \
-                  double(pnt2[0]) * (1 + (t-3)*u*u + (2-t)*u*u*u) + \
-                  double(pnt3[0]) * (t*u + (3-2*t)*u*u + (t-2)*u*u*u) + \
-                  double(pnt4[0]) * (-t*u*u + t*u*u*u));
-        stepY1 = (double(pnt1[1]) * ((-t*u + 2*t*u*u - t*u*u*u)) + \
-                  double(pnt2[1]) * (1 + (t-3)*u*u + (2-t)*u*u*u) + \
-                  double(pnt3[1]) * (t*u + (3-2*t)*u*u + (t-2)*u*u*u) + \
-                  double(pnt4[1]) * (-t*u*u + t*u*u*u));
-        stepZ1 = (double(pnt1[2]) * ((-t*u + 2*t*u*u - t*u*u*u)) + \
-                  double(pnt2[2]) * (1 + (t-3)*u*u + (2-t)*u*u*u) + \
-                  double(pnt3[2]) * (t*u + (3-2*t)*u*u + (t-2)*u*u*u) + \
-                  double(pnt4[2]) * (-t*u*u + t*u*u*u));
-        if (showCatmullRom)
-        {
-            glColor3f(0.129f, 0.850f, 0.768f);
-            drawLine(stepX0, stepY0, stepZ0, stepX1, stepY1, stepZ1);
-        }
-        stepX0 = stepX1;
-        stepY0 = stepY1;
-        stepZ0 = stepZ1;
-
-        if (showGeneralizedCylinder)
-        {
-            lastPoints = currentPoints;
-
-            velX = (double(pnt1[0]) * (-t + 4*t*u - 3*t*u*u) + \
-                    double(pnt2[0]) * (2*(t-3)*u + 3*(2-t)*u*u) + \
-                    double(pnt3[0]) * (t + 2*(3-2*t)*u + 3*(t-2)*u*u) + \
-                    double(pnt4[0]) * (-2*t*u + 3*t*u*u));
-            velY = (double(pnt1[1]) * (-t + 4*t*u - 3*t*u*u) + \
-                    double(pnt2[1]) * (2*(t-3)*u + 3*(2-t)*u*u) + \
-                    double(pnt3[1]) * (t + 2*(3-2*t)*u + 3*(t-2)*u*u) + \
-                    double(pnt4[1]) * (-2*t*u + 3*t*u*u));
-            velZ = (double(pnt1[2]) * (-t + 4*t*u - 3*t*u*u) + \
-                    double(pnt2[2]) * (2*(t-3)*u + 3*(2-t)*u*u) + \
-                    double(pnt3[2]) * (t + 2*(3-2*t)*u + 3*(t-2)*u*u) + \
-                    double(pnt4[2]) * (-2*t*u + 3*t*u*u));
-
-            vel1 = QVector3D(velX, velY, velZ).normalized();
-
-            // Following math is to calculate the next frenet frame based on rotation
-            QVector3D A = QVector3D::crossProduct(vel0, vel1).normalized();
-            sqx = A.x()*A.x();
-            sqy = A.y()*A.y();
-            sqz = A.z()*A.z();
-            cos = QVector3D::dotProduct(vel0, vel1);
-            cos1 = 1 - cos;
-            xycos1 = A.x()*A.y()*cos1;
-            yzcos1 = A.y()*A.z()*cos1;
-            zxcos1 = A.z()*A.x()*cos1;
-            sin = sqrt(1 - cos*cos);
-            xsin = A.x()*sin;
-            ysin = A.y()*sin;
-            zsin = A.z()*sin;
-
-            double values[] = {(sqx + ((1 - sqx) * cos)), (xycos1 + zsin), (zxcos1 - ysin),
-                               (xycos1 - zsin), (sqy + ((1 - sqy) * cos)), (yzcos1 + xsin),
-                               (zxcos1 + ysin), (yzcos1 - xsin), ((sqz + (1 - sqz) * cos))};
-            QMatrix3x3 R = QMatrix3x3( values );
-
-            biNorm = vectorTransform(biNorm ,R).normalized();
-            norm = QVector3D::crossProduct(vel1, biNorm).normalized();
-
-            currentPoints = find3dCirclePoints(biNorm, norm, QVector3D(stepX1, stepY1, stepZ1));
-
-//            drawCylinder(lastPoints, currentPoints);
-            drawWireFrame(lastPoints, currentPoints);
-        vel0 = vel1;
-        }
-        u += step;
-    }
-    // Draw the final line per segment, to connect with the next segment
-    if (showCatmullRom)
-    {
-        glColor3f(0.129f, 0.850f, 0.768f);
-        drawLine(stepX1, stepY1, stepZ1, double(pnt3[0]), double(pnt3[1]), double(pnt3[2]));
-    }
 }
 
 void catmull::genCylRadius(int tradius)

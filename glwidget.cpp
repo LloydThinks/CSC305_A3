@@ -107,11 +107,11 @@ void GLWidget::paintGL()
     {
         // Draw Axis
         glColor3f(1.0f, 0.0f, 0.0f);
-        drawLine(-1.0, 0.0, 0.0, 1.0, 0.0, 0.0);
+        drawLine(-1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 2.0);
         glColor3f(0.0f, 1.0f, 0.0f);
-        drawLine(0.0, -1.0, 0.0, 0.0, 1.0, 0.0);
+        drawLine(0.0, -1.0, 0.0, 0.0, 1.0, 0.0, 2.0);
         glColor3f(0.0f, 0.0f, 1.0f);
-        drawLine(0.0, 0.0, -1.0, 0.0, 0.0, 1.0);
+        drawLine(0.0, 0.0, -1.0, 0.0, 0.0, 1.0, 2.0);
     }
     glPushMatrix();
     glScalef( scale, scale, scale );
@@ -186,7 +186,6 @@ void GLWidget::mousePressEvent( QMouseEvent *e )
     {
         Rotating = true;
         lastMousePoint = e->pos();
-        qDebug() << "Left Button";
     }
 
     if ( e->button() == Qt::RightButton)

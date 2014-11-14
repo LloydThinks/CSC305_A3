@@ -25,8 +25,9 @@ void drawLine(double x0, double y0, double x1, double y1 )
     glEnd();
 }
 
-void drawLine(double x0, double y0, double z0, double x1, double y1, double z1 )
+void drawLine(double x0, double y0, double z0, double x1, double y1, double z1, double width )
 {
+    glLineWidth(width);
     glBegin(GL_LINES);
     glVertex3f(x0, y0, z0);
     glVertex3f(x1, y1, z1);
