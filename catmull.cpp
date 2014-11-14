@@ -487,8 +487,11 @@ QVector<QVector3D> catmull::find3dCirclePoints(QVector3D norm, QVector3D biNorm,
 void catmull::drawCylinder(QVector<QVector3D> lastPoints, QVector<QVector3D> currentPoints, QVector3D center)
 {
     QVector3D t0, t1, b0, b1, normal;
-    b1 = lastPoints[lastPoints.size() - 1];
-    t1 = currentPoints[currentPoints.size() - 1];
+    if (lastPoints.size() > 0)
+    {
+        b1 = lastPoints[lastPoints.size() - 1];
+        t1 = currentPoints[currentPoints.size() - 1];
+    }
 
     glColor3f(0.129f, 0.850f, 0.768f);
 
@@ -521,8 +524,11 @@ void catmull::drawCylinder(QVector<QVector3D> lastPoints, QVector<QVector3D> cur
 void catmull::drawWireFrame(QVector<QVector3D> lastPoints, QVector<QVector3D> currentPoints)
 {
     QVector3D t0, t1, b0, b1;
-    b1 = lastPoints[lastPoints.size() - 1];
-    t1 = currentPoints[currentPoints.size() - 1];
+    if (lastPoints.size() > 0)
+    {
+        b1 = lastPoints[lastPoints.size() - 1];
+        t1 = currentPoints[currentPoints.size() - 1];
+    }
 
     glColor3f(0.129f, 0.850f, 0.768f);
     for (int i = 0; i < numCircleSegs; i++)
