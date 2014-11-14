@@ -226,10 +226,11 @@ void catmull::draw()
     }
 }
 
+// Draws the frenet Frame box at the currently stored global coordinates
 void catmull::drawFrenetFrameBox()
 {
-    //glColor3f(0.129f, 0.850f, 0.768f);
-    glColor3f(1.0f, 0.0f, 0.0f);
+    glColor3f(0.129f, 0.850f, 0.768f);
+    //glColor3f(1.0f, 0.0f, 0.0f);
 
     // Draw Top of Frenet Box
     drawLine(frenetFrameBox[0].x(), frenetFrameBox[0].y(), frenetFrameBox[0].z(),
@@ -262,6 +263,7 @@ void catmull::drawFrenetFrameBox()
              frenetFrameBox[7].x(), frenetFrameBox[7].y(), frenetFrameBox[7].z());
 }
 
+// Finds all of the sub-points needed to construct the catmull rom spline with drawLine()
 QVector<QVector3D> catmull::findCatPoints()
 {
     QVector<QVector3D> catPoints = QVector<QVector3D>();
@@ -295,6 +297,7 @@ QVector<QVector3D> catmull::findCatPoints()
     return catPoints;
 }
 
+// Give all of the catmull rom points are given, will draw lines between the those points
 void catmull::drawCatmull(QVector<QVector3D> catPoints)
 {
     glColor3f(0.129f, 0.850f, 0.768f);
@@ -307,6 +310,7 @@ void catmull::drawCatmull(QVector<QVector3D> catPoints)
 
 /** GENERALIZED CYLINDER **/
 
+// Finds the circular points around the catmull rom points given to it.  Requires frenet calculation
 QVector< QVector<QVector3D> > catmull::findGenCylPoints(QVector<QVector3D> catPoints)
 {
     QVector< QVector<QVector3D> > genCylPoints = QVector< QVector<QVector3D> >();
@@ -453,6 +457,7 @@ void catmull::drawGenCyl(QVector< QVector<QVector3D> > genCylPoints, QVector<QVe
     }
 }
 
+// Given the norm, biNorm, and point, this will calculate the actual points to make the ring of a cylinder
 QVector<QVector3D> catmull::find3dCirclePoints(QVector3D norm, QVector3D biNorm, QVector3D point)
 {
     double cX, cY;
@@ -544,6 +549,8 @@ QVector3D catmull::vectorTransform(QVector3D v, QMatrix3x3 m)
     transformed.setZ( ((m(2,0))*v.x()) + ((m(2,1))*v.y()) + ((m(2,2))*v.z()) );
     return transformed;
 }
+
+/** All the helper functions for the UI to function properly **/
 
 void catmull::genCylRadius(int tradius)
 {

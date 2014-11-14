@@ -9,7 +9,6 @@ INCLUDEPATH += .
 # Input
 HEADERS += glwidget.h \
     window.h \
-    linearalgebra.h \
     foundation.h \
     version.h \
     catmull.h \
@@ -20,7 +19,6 @@ FORMS += MainWindow.ui \
 SOURCES += glwidget.cpp \
     main.cpp \
     window.cpp \
-    linearalgebra.cpp \
     stuff.cpp \
     catmull.cpp \
     twod.cpp

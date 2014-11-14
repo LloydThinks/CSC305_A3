@@ -74,7 +74,6 @@ private:
 	int lastArc, error;
     int cpt, seg, tvmethod;
 
-    jVec2 tv[MAXP];  // must make this a 3D vector
 	bool mousedown, hull, animatenow, showsteps, arcLengthSwitch, makeArcMode;
     int frames,numSteps, nframe;
     int param; // t parameter

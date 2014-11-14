@@ -5,8 +5,6 @@
 #define SEP << " " <<
 #define NL  << "\n"
 
-using namespace std;
-
 // I can't seem to make the -LANG:bool=ON switch work so :
 
 //---------------------------------------------------------------------------
@@ -28,7 +26,6 @@ typedef int bool;
 #include <iostream>
 #include <math.h>
 #include <time.h>
-#include "linearalgebra.h"
 #include <fstream>
 #include <qmessagebox.h>
 #include <QPainter>
