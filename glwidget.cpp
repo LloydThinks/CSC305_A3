@@ -186,6 +186,7 @@ void GLWidget::mousePressEvent( QMouseEvent *e )
     {
         Rotating = true;
         lastMousePoint = e->pos();
+        qDebug() << "Left Button";
     }
 
     if ( e->button() == Qt::RightButton)
@@ -208,10 +209,9 @@ void GLWidget::mouseReleaseEvent( QMouseEvent *e)
     if ( e->button() == Qt::RightButton)
     {
         Scaling = false;
-        DoRotate(e->pos(), lastMousePoint);
+        DoScale(e->pos(), lastMousePoint);
     }
     updateGL();
-
 }
 
 void GLWidget::mouseMoveEvent( QMouseEvent *e )
@@ -295,18 +295,19 @@ void GLWidget::DoRotate(QPoint desc, QPoint orig)
 void GLWidget::DoScale(QPoint desc, QPoint orig)
 {
     //TODO: adjust the camera position so the viewport is scaled.
-    double length = sqrt(CameraPos.x * CameraPos.x + CameraPos.y * CameraPos.y + CameraPos.z * CameraPos.z);
+    double length = sqrt(xfrom * xfrom + yfrom * yfrom + zfrom * zfrom);
 
     double newLength = length + (desc.y() - orig.y()) * MovePerPixel;
 
     if (newLength > 6)
     {
         double ratio = newLength / length;
-        CameraPos.x *= ratio;
-        CameraPos.y *= ratio;
-        CameraPos.z *= ratio;
+        xfrom *= ratio;
+        yfrom *= ratio;
+        zfrom *= ratio;
     }
 }
+
 void GLWidget::changeLookAt()
 {
     lookingAt++;
